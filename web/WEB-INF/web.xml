@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_9" version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <!--上面声明默认的名称空间和XMLSchema实例名称空间-->
+    <!--上面xsi双参数用于文档格式校验。名称空间的名字（空格）模式文档的位置。-->
+
+    <!--如果使用工具编辑部署描述符，display-name元素包含的就是XML编辑器显示的名称-->
+    <!--这个与服务器配置基本没有什么关系-->
+    <display-name>QianXunServer</display-name>
+    <welcome-file-list>
+        <!--默认主页-->
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!--Struts2-->
+    <filter>
+        <filter-name>SSH</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SSH</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--Spring-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+</web-app>
