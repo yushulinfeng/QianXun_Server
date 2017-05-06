@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- applicationContext.xml默认位置在WEB-INF下，与web.xml同目录 -->
+
+    <!-- 定义数据源的信息 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost/qianxun"/>
+        <property name="user" value="root"/>
+        <property name="password" value="root"/>
+        <property name="maxPoolSize" value="80"/>
+        <property name="minPoolSize" value="1"/>
+        <property name="initialPoolSize" value="1"/>
+        <property name="maxIdleTime" value="20"/>
+    </bean>
+
+    <!--定义Hibernate的SessionFactory -->
+    <!-- SessionFactory使用的数据源为上面的数据源 -->
+    <!-- 指定了Hibernate的映射文件和配置信息 -->
+    <!-- xml-beans（*.hbm.xml）:org.springframework.orm.hibernate3.LocalSessionFactoryBean -->
+    <!-- 注解-beans（*.java中含注解）:org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean -->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource">
+            <ref local="dataSource"/>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="show_sql">true</prop>
+                <prop key="hibernate.jdbc.batch_size">20</prop>
+                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/outapp</prop>
+                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+            </props>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>beans.InfoEntity</value>
+                <value>beans.UserEntity</value>
+            </list>
+        </property>
+
+    </bean>
+
+    <!--定义Hibernate的事务管理器 -->
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- more bean definitions go here -->
+
+    <!-- 用户登录注册相关 -->
+    <bean id="UserDao" class="dao.UserDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="UserService" class="service.UserServiceImpl">
+        <property name="dao" ref="UserDao"/>
+    </bean>
+    <bean id="UserAction" class="action.UserAction">
+        <property name="userService" ref="UserService"/>
+    </bean>
+
+
+</beans>
