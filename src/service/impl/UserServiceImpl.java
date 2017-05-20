@@ -1,22 +1,5 @@
 package service.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-
-import service.UserService;
-import util.BaiChuanUtils;
-import util.CheckUtil;
-import util.ImageUtil;
 import config.BaseConfiger;
 import config.BasicInfoConfig;
 import dao.UserAccountDAO;
@@ -25,6 +8,16 @@ import domain.BusinessService;
 import domain.User;
 import domain.UserAccount;
 import domain.UserRequest;
+import service.UserService;
+import util.BaiChuanUtils;
+import util.CheckUtil;
+import util.ImageUtil;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class UserServiceImpl implements UserService {
 
@@ -117,14 +110,14 @@ public class UserServiceImpl implements UserService {
 			if (!"".equals(pic) && !"null".equals(pic) && pic != null) {
 				String picName = userId + System.currentTimeMillis() + "_background.jpg";
 				String picPath = "/qianxun" + homePageImageDir + picName;
-				IOUtils.copy(new FileInputStream(pic), new FileOutputStream(root + homePageImageDir + picName));
+				////IOUtils.copy(new FileInputStream(pic), new FileOutputStream(root + homePageImageDir + picName));
 				ImageUtil.zipTo400(root + homePageImageDir + picName, root + SmallheadIconDir + picName);
 				boolean flag = userDAO.updateUserBackGroundImage(userId, picPath);
 				if (flag) {
 					return true;
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
