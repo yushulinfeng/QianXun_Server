@@ -20,6 +20,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.context.annotation.Lazy;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "qx_userrequest")
 public class UserRequest implements Serializable {
