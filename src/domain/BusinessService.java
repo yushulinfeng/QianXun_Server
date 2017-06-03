@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Lazy;
  * @author 沧
  * 
  */
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "qx_businessservice")
 public class BusinessService implements Serializable {
@@ -329,7 +330,7 @@ public class BusinessService implements Serializable {
 		this.nickName = nickName;
 	}
 
-//	@Transient
+//	@Transient //该标记表示非映射
 	public String getDiscussId() {
 		return discussId;
 	}
