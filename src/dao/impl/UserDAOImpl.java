@@ -36,7 +36,8 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 		Transaction tx = session.beginTransaction();
 		try {
 			tx.begin();
-			id = (int) session.createQuery(hql).setParameter(1, username).uniqueResult();
+			id = (int) session.createQuery(hql).setParameter(1, username)
+					.uniqueResult();
 
 			tx.commit();
 			session.close();
@@ -60,7 +61,8 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 		Transaction tx = session.beginTransaction();
 		try {
 			tx.begin();
-			session.createQuery(sql).setParameter(0, x).setParameter(1, y).setParameter(2, username);
+			session.createQuery(sql).setParameter(0, x).setParameter(1, y)
+					.setParameter(2, username);
 			session.flush();
 			tx.commit();
 			session.close();
@@ -83,7 +85,8 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 		Transaction tx = session.beginTransaction();
 		try {
 			tx.begin();
-			session.createQuery(hql).setParameter(0, pic).setParameter(1, userId).executeUpdate();
+			session.createQuery(hql).setParameter(0, pic)
+					.setParameter(1, userId).executeUpdate();
 			tx.commit();
 			session.close();
 			// releaseSession(session);
@@ -108,7 +111,8 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 		Transaction tx = session.beginTransaction();
 		try {
 			tx.begin();
-			session.createQuery(hql).setParameter(0, pic).setParameter(1, userId).executeUpdate();
+			session.createQuery(hql).setParameter(0, pic)
+					.setParameter(1, userId).executeUpdate();
 			tx.commit();
 			session.close();
 			// releaseSession(session);
@@ -186,7 +190,8 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 		String hql = "from User u where u.username = ?";
 		User user = null;
 		try {
-			user = (User) this.getHibernateTemplate().find(hql, username).get(0);
+			user = (User) this.getHibernateTemplate().find(hql, username)
+					.get(0);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			user = null;
@@ -200,7 +205,8 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 	@Override
 	public boolean isFavorite(int userId, int serviceId) {
 		String hql = "select bs from BisunessService bs where bs.id = ? and bs in (select u.favoriteServices from User u where u.id = ?)";
-		return this.getHibernateTemplate().find(hql, serviceId, userId).size() == 1 ? true : false;
+		return this.getHibernateTemplate().find(hql, serviceId, userId).size() == 1 ? true
+				: false;
 	}
 
 	@Override
@@ -222,7 +228,7 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 
 	@Override
 	public User getById(int id) {
-		String hql = "from User u where u.id = ?";
+		String hql = "from User where id = ?";
 		try {
 			User user = (User) this.getHibernateTemplate().find(hql, id).get(0);
 			return user;
@@ -242,7 +248,8 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 	public User login(long username) {
 		String sql = "select u.username and u.password from User u where u.username = ?";
 		Session session = this.getSession();
-		return (User) session.createQuery(sql).setParameter(0, username).uniqueResult();
+		return (User) session.createQuery(sql).setParameter(0, username)
+				.uniqueResult();
 	}
 
 	@Override
@@ -265,23 +272,26 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private List<BusinessService> doSplitPage(final String hql, final int curPage, final int pageSize,
-			final Object... values) {
+	private List<BusinessService> doSplitPage(final String hql,
+			final int curPage, final int pageSize, final Object... values) {
 		// 调用模板的execute方法，参数是实现了HibernateCallback接口的匿名类，
-		return (List<BusinessService>) super.getHibernateTemplate().execute(new HibernateCallback() {
-			// 重写其doInHibernate方法返回一个object对象
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				// 创建query对象
-				Query query = session.createQuery(hql);
-				for (int i = 0; i < values.length; i++) {
-					query.setParameter(i, values[i]);
-				}
-				// 返回其执行了分布方法的list
-				query.setFirstResult((curPage - 1) * pageSize).setMaxResults(pageSize);
-				List<UserRequest> list = query.list();
-				return list;
-			}
-		});
+		return (List<BusinessService>) super.getHibernateTemplate().execute(
+				new HibernateCallback() {
+					// 重写其doInHibernate方法返回一个object对象
+					public Object doInHibernate(Session session)
+							throws HibernateException, SQLException {
+						// 创建query对象
+						Query query = session.createQuery(hql);
+						for (int i = 0; i < values.length; i++) {
+							query.setParameter(i, values[i]);
+						}
+						// 返回其执行了分布方法的list
+						query.setFirstResult((curPage - 1) * pageSize)
+								.setMaxResults(pageSize);
+						List<UserRequest> list = query.list();
+						return list;
+					}
+				});
 	}
 
 }

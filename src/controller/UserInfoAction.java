@@ -51,7 +51,7 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 
 	private File backgroundImage;
 	private File headIcon;
-	private UserDAO userDAO;
+	// private UserDAO userDAO;////////////////////后期 注释的
 	private String appSecret;
 	private User user;
 
@@ -77,9 +77,11 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 	}
 
 	public String updateUserBackGroundImage() {
-		System.out.println("updateUserBackGroundImage:" + userId + ":" + backgroundImage);
+		System.out.println("updateUserBackGroundImage:" + userId + ":"
+				+ backgroundImage);
 		String result = "-1";
-		boolean flag = userService.updateUserBackGroundImage(userId, backgroundImage);
+		boolean flag = userService.updateUserBackGroundImage(userId,
+				backgroundImage);
 
 		if (flag) {
 			result = "1";
@@ -152,7 +154,7 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 	}
 
 	public String getInfoById() {
-		// System.out.println("getInfoById-userId:"+userId);
+		System.out.println("getInfoById-userId:" + userId);
 		// String result = "-1";
 		//
 		// if (user == null) {
@@ -162,11 +164,14 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 		// return SUCCESS;
 		// }
 
-		User user = userDAO.findById(userId);
+		// User user = userDAO.findById(userId);
+		User user = userService.getById(userId);
 		JsonConfig jsonConfig = new JsonConfig();
 		jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
-		jsonConfig.setExcludes(new String[] { "password", "concernedPeople", "favoriteServices", "favoriteServices",
-				"photos", "receivedRequest", "services", "todoRequest", "userComment", "userRequest", "" });
+		jsonConfig.setExcludes(new String[] { "password", "concernedPeople",
+				"favoriteServices", "favoriteServices", "photos",
+				"receivedRequest", "services", "todoRequest", "userComment",
+				"userRequest", "" });
 		JSONObject userJo = JSONObject.fromObject(user, jsonConfig);
 		System.out.println("getInfoById:" + userId + ":" + userJo);
 		inputStream = new ByteArrayInputStream(userJo.toString().getBytes());
@@ -200,12 +205,16 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 					// u.setUsername(user.getUsername());
 					u.setBirthday(user.getBirthday());
 					u.setAddress(user.getAddress());
-					if (!"".equals(user.getIconfile()) && !"null".equals(user.getIconfile())
+					if (!"".equals(user.getIconfile())
+							&& !"null".equals(user.getIconfile())
 							&& null != user.getIconfile()) {
-						String picName = u.getUsername() + System.currentTimeMillis() + ".png";
-						File file = new File(BaseConfiger.FileSavePath + BasicInfoConfig.headIconDir + picName);
+						String picName = u.getUsername()
+								+ System.currentTimeMillis() + ".png";
+						File file = new File(BaseConfiger.FileSavePath
+								+ BasicInfoConfig.headIconDir + picName);
 						// 得到图片保存的位置(根据root来得到图片保存的路径在tomcat下的该工程里)
-						System.out.println("headIcon saved path:" + BaseConfiger.FileSavePath
+						System.out.println("headIcon saved path:"
+								+ BaseConfiger.FileSavePath
 								+ BasicInfoConfig.headIconDir + picName);
 
 						InputStream is = new FileInputStream(user.getIconfile());
@@ -220,11 +229,18 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 						is.close();
 						os.close();
 
-						ImageUtil.zipTo400(BaseConfiger.FileSavePath + BasicInfoConfig.headIconDir + picName,
-								BaseConfiger.FileSavePath + BasicInfoConfig.SmallheadIconDir + picName);
-						BaiChuanUtils.updateUser(userId, user.getNickName(), BasicInfoConfig.HOST
-								+ BasicInfoConfig.headIconDir + picName);
-						u.setHeadIcon("/qianxun" + BasicInfoConfig.headIconDir + picName);
+						ImageUtil.zipTo400(BaseConfiger.FileSavePath
+								+ BasicInfoConfig.headIconDir + picName,
+								BaseConfiger.FileSavePath
+										+ BasicInfoConfig.SmallheadIconDir
+										+ picName);
+						BaiChuanUtils
+								.updateUser(userId, user.getNickName(),
+										BasicInfoConfig.HOST
+												+ BasicInfoConfig.headIconDir
+												+ picName);
+						u.setHeadIcon("/qianxun" + BasicInfoConfig.headIconDir
+								+ picName);
 					}
 					u.setNickName(user.getNickName());
 					u.setGender(user.getGender());
@@ -259,8 +275,9 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 			User user = userService.findByUsername(username);
 			JsonConfig jsConfig = new JsonConfig();
 			jsConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
-			jsConfig.setExcludes(new String[] { "password", "userRequest", "userComment", "todoRequest",
-					"concernedPeople", "favoriteServices", "photos", "receivedRequest", "services" });
+			jsConfig.setExcludes(new String[] { "password", "userRequest",
+					"userComment", "todoRequest", "concernedPeople",
+					"favoriteServices", "photos", "receivedRequest", "services" });
 			userJo = JSONObject.fromObject(user, jsConfig);
 			result = userJo.toString();
 		} catch (Exception e) {
@@ -298,10 +315,14 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 
 			JSONObject jsResp = new JSONObject();
 			JsonConfig jsConfig = new JsonConfig();
-			jsConfig.setExcludes(new String[] { "age", "address", "birthday", "concernedPeople", "favoriteServices",
-					"gender", "hobby", "homePageBackgroundImage", "job", "latestLocation_x", "latestLocation_y",
-					"password", "photos", "rank", "rank_credit", "receivedRequest", "registCheckCode", "registTime",
-					"services", "sign", "todoRequest", "userComment", "userRequest", "verifyStatus", "alipay_verify" });
+			jsConfig.setExcludes(new String[] { "age", "address", "birthday",
+					"concernedPeople", "favoriteServices", "gender", "hobby",
+					"homePageBackgroundImage", "job", "latestLocation_x",
+					"latestLocation_y", "password", "photos", "rank",
+					"rank_credit", "receivedRequest", "registCheckCode",
+					"registTime", "services", "sign", "todoRequest",
+					"userComment", "userRequest", "verifyStatus",
+					"alipay_verify" });
 			jsConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 			JSONArray ja = JSONArray.fromObject(list, jsConfig);
 
@@ -342,7 +363,8 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 				inputStream = MsgUtil.sendString(result);
 				return SUCCESS;
 			}
-			BusinessService bs = businessServiceService.getByBServiceId(serviceId);
+			BusinessService bs = businessServiceService
+					.getByBServiceId(serviceId);
 			if (bs == null) {
 				result = "-5";// 没有此服务
 				System.out.println("addFavoriteService-result:" + result);
@@ -405,7 +427,8 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 				inputStream = MsgUtil.sendString(result);
 				return SUCCESS;
 			}
-			BusinessService bs = businessServiceService.getByBServiceId(serviceId);
+			BusinessService bs = businessServiceService
+					.getByBServiceId(serviceId);
 			if (bs == null) {
 				result = "-5";// 没有此服务
 				System.out.println("cancelFavoriteService-result:" + result);
@@ -651,16 +674,21 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 			int userId = js.getInt("userId");
 			int page = js.getInt("page");
 
-			List<BusinessService> list = userService.getAllFBByUserId(page, userId);
+			List<BusinessService> list = userService.getAllFBByUserId(page,
+					userId);
 
 			JSONObject jsResp = new JSONObject();
 			JsonConfig jsConfig = new JsonConfig();
-			jsConfig.setExcludes(new String[] { "canServiceDay", "category", "exchange", "finishedPeople",
-					"favoritePeople", "sign", "greatPeople", "location_x", "location_y", "serviceCity", "serviceTime",
-					"userId", "address", "age", "birthday", "concernedPeople", "favoriteServices", "hobby",
-					"homePageBackgroundImage", "job", "latestLocation_x", "latestLocation_y", "password", "photos",
-					"rank", "rank_credit", "receivedRequest", "registCheckCode", "registTime", "services",
-					"todoRequest", "userComment", "userRequest" });
+			jsConfig.setExcludes(new String[] { "canServiceDay", "category",
+					"exchange", "finishedPeople", "favoritePeople", "sign",
+					"greatPeople", "location_x", "location_y", "serviceCity",
+					"serviceTime", "userId", "address", "age", "birthday",
+					"concernedPeople", "favoriteServices", "hobby",
+					"homePageBackgroundImage", "job", "latestLocation_x",
+					"latestLocation_y", "password", "photos", "rank",
+					"rank_credit", "receivedRequest", "registCheckCode",
+					"registTime", "services", "todoRequest", "userComment",
+					"userRequest" });
 			jsConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
 			JSONArray ja = JSONArray.fromObject(list, jsConfig);
 
@@ -686,7 +714,8 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 			} else {
 				System.out.println(user);
 				JSONObject userJo = JSONObject.fromObject(user);
-				setInputStream(new ByteArrayInputStream(userJo.toString().getBytes()));
+				setInputStream(new ByteArrayInputStream(userJo.toString()
+						.getBytes()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -712,7 +741,8 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 			String resp = new SmsVerifyKit(username + "", checkCode).go();
 			status = JSONObject.fromObject(resp).getInt("status");
 			if (status == 200) {
-				Map<String, Object> map = userService.changePwd(username, password);
+				Map<String, Object> map = userService.changePwd(username,
+						password);
 				status = (int) map.get("status");
 			}
 		} catch (Exception e) {
@@ -736,7 +766,8 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 			String key = (String) obj;
 			if (key.equals(checkCode)) {
 				session.remove("changePwdCheckCode");
-				Map<String, Object> infoMap = userService.changePwd(username, password);
+				Map<String, Object> infoMap = userService.changePwd(username,
+						password);
 				int status = (int) infoMap.get("status");
 				result = status + "";
 			} else {
@@ -814,13 +845,13 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 		this.userId = userId;
 	}
 
-	public UserDAO getUserDAO() {
-		return userDAO;
-	}
-
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
+	// public UserDAO getUserDAO() {
+	// return userDAO;
+	// }
+	//
+	// public void setUserDAO(UserDAO userDAO) {
+	// this.userDAO = userDAO;
+	// }
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -854,7 +885,8 @@ public class UserInfoAction extends ActionSupport implements SessionAware {
 		return businessServiceService;
 	}
 
-	public void setBusinessServiceService(BusinessServiceService businessServiceService) {
+	public void setBusinessServiceService(
+			BusinessServiceService businessServiceService) {
 		this.businessServiceService = businessServiceService;
 	}
 

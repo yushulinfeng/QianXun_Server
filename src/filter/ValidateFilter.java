@@ -48,6 +48,7 @@ public class ValidateFilter implements Filter {
 				pw.write(TimeUtil.currentTime());
 				pw.flush();
 				pw.close();
+				return;//TODO
 			}
 
 			// action过滤器
