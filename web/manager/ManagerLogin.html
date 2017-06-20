@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" content="">
+  <title>高能管理员-登录</title>
+   <link rel="stylesheet" href="css/bootstrap.min.css">
+   <script type="text/javascript" src="js/bootstrap.min.js"></script> 
+   <script type="text/javascript" src="js/jquery.min.js"></script> 
+   <script type="text/javascript" src="js/jQuery.md5.js"></script> 
+   <script type="text/javascript" src="js/sign.js"></script> 
+</head>
+<body>
+ 
+<br/><br/>
+<center>
+<form class="col-sm-offset-4 form-horizontal" role="form">
+   <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-3">
+         <h3>高能管理</h3>
+      </div>
+   </div>
+   <div class="form-group">
+      <label for="firstname" class="col-sm-2 control-label">账号</label>
+      <div class="col-sm-3">
+         <input type="text" class="form-control" id="name" 
+            placeholder="请输入账号">
+      </div>
+   </div>
+   <br/>
+   <div class="form-group">
+      <label for="lastname" class="col-sm-2 control-label">密码</label>
+      <div class="col-sm-3">
+         <input type="password" class="form-control" id="pass"
+            placeholder="请输入密码">
+      </div>
+   </div>
+   <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-3">
+         <button type="button" class="btn btn-default" id="login">登录</button>
+      </div>
+   </div>
+</form>
+</center>
+ 
+ <script>
+$('#login').click(function userLogin() {
+	var name = $('#name').val();
+	if (name == "") {
+		alert("账号不能为空");
+		return;
+	}
+	var pass = $('#pass').val();
+	if (pass == "") {
+		alert("密码不能为空");
+		return;
+	}
+	$.post(signUrl("userVerify_adminLogin.action"), {
+		'admin.username' : name,
+		'admin.password' : pass
+	}, function(data, status) {
+		if (data == 1) {//登录成功
+			window.location="ManagerMain.jsp";
+		} else {
+			alert("账号或密码错误");
+		}
+	})
+});
+</script>
+
+</body>
+</html>
