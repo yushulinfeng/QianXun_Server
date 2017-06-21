@@ -308,11 +308,6 @@
 			<ref bean="photoService" />
 		</property>
 	</bean>
-	<bean id="videoAction" class="controller.VideoAction">
-		<property name="videoService">
-			<ref bean="videoService" />
-		</property>
-	</bean>
 	<bean id="userVerifyAction" class="controller.UserVerifyAction">
 		<property name="userVerifyService">
 			<ref bean="userVerifyService" />
@@ -332,25 +327,6 @@
 			<ref bean="propDAO" />
 		</property>
 	</bean>
-	<bean id="businessServiceAction" class="controller.BusinessServiceAction">
-		<property name="businessServiceService">
-			<ref bean="businessServiceService" />
-		</property>
-	</bean>
-	<bean id="userGetServiceAction" class="controller.UserGetServiceAction">
-		<property name="userGetServiceService">
-			<ref bean="userGetServiceService" />
-		</property>
-		<property name="businessServiceService">
-			<ref bean="businessServiceService" />
-		</property>
-		<property name="userAccountService">
-			<ref bean="userAccountService" />
-		</property>	
-		<property name="userService">
-			<ref bean="userService" />
-		</property>
-	</bean>
 	<bean id="dynamicAction" class="controller.DynamicAction">
 		<property name="dynamicService">
 			<ref bean="dynamicService" />
@@ -364,16 +340,9 @@
 			<ref bean="userAccountService" />
 		</property>
 	</bean>
-	<bean id="alipayAction" class="controller.AlipayAction">
-	</bean>
 	<bean id="fileAction" class="controller.FileAction">
 		<property name="tradeRecordService">
 			<ref bean="tradeRecordService" />
-		</property>
-	</bean>
-	<bean id="adminOpAction" class="controller.AdminOpAction">
-		<property name="adminDAO">
-			<ref bean="adminDAO" />
 		</property>
 	</bean>
 
